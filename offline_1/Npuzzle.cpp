@@ -136,10 +136,11 @@ public:
         {
             state *current_state = pq.top();
             pq.pop();
-            this->expanded_nodes++;
-
+            
             if (closed_set.count(current_state->grid) > 0)
-                continue;
+            continue;
+            
+            this->expanded_nodes++;
 
             if (isGoalState(current_state->grid))
             {
