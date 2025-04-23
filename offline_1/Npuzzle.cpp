@@ -10,10 +10,10 @@ struct state
     vector<vector<int>> grid;
     state *parent_state;
     int move;
-    int priority;
-    int herustic_cost;
+    double priority;
+    double herustic_cost;
 
-    state(vector<vector<int>> grid, state *parent, int move, int priority, int heuristic_cost)
+    state(vector<vector<int>> grid, state *parent, int move, double priority, double heuristic_cost)
     {
         this->grid = grid;
         this->parent_state = parent;
@@ -50,6 +50,8 @@ class puzzleSolver
     state initial_state;
     vector<int> dr = {-1, 0, 1, 0};
     vector<int> dc = {0, 1, 0, -1};
+    int explored_nodes = 0;
+    int expanded_nodes = 0;
 
 public:
     puzzleSolver(int K, function<double(vector<vector<int>>)> heuristic_function, state initial_state)
@@ -111,6 +113,8 @@ public:
         {
             cout << state->grid << endl;
         }
+        cout << "Total explored nodes: " << this->explored_nodes << endl;
+        cout << "Total expanded nodes: " << this->expanded_nodes << endl;
     }
 
     void solvePuzzle()
@@ -123,13 +127,16 @@ public:
         }
         priority_queue<state *, vector<state *>, CompareStatePtr> pq;
         set<vector<vector<int>>> closed_set;
-
+        this->expanded_nodes = 0;
+        
         pq.push(&initial_state);
+        this->explored_nodes = 1;
 
         while (!pq.empty())
         {
             state *current_state = pq.top();
             pq.pop();
+            this->expanded_nodes++;
 
             if (closed_set.count(current_state->grid) > 0)
                 continue;
@@ -165,14 +172,18 @@ public:
                                 swap(next_grid[r][c], next_grid[next_row][next_col]);
 
                                 int next_move = current_state->move + 1;
-                                int next_heuristic_cost = heuristic_function(next_grid);
-                                int next_priority = next_move + next_heuristic_cost;
+                                double next_heuristic_cost = heuristic_function(next_grid);
+                                double next_priority = next_move + next_heuristic_cost;
+                                // cout << "Next move: " << next_move << endl;
+                                // cout << "Next heuristic cost: " << next_heuristic_cost << endl;
+                                // cout << "Next priority: " << next_priority << endl;
 
                                 if (closed_set.count(next_grid))
                                     continue;
 
                                 state *next_state = new state(next_grid, current_state, next_move, next_priority, next_heuristic_cost);
                                 pq.push(next_state);
+                                this->explored_nodes++;
                             }
                         }
                     }
@@ -190,7 +201,8 @@ int main()
     vector<vector<int>> grid(K, vector<int>(K, 0));
     cin >> grid;
     state initial_state(grid);
-    puzzleSolver solver(K, linearConflict, initial_state);
+     puzzleSolver solver(K, linearConflict, initial_state);
+    // cout<<euclideanDistance(grid)<<endl;
 
     solver.solvePuzzle();
 }

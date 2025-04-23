@@ -5,7 +5,7 @@
 #include "helper_function.hpp"
 using namespace std;
 
-int hammingDistance(const vector<vector<int>>& grid)
+double hammingDistance(const vector<vector<int>>& grid)
 {
     int distance = 0;
     int k = grid[0].size();
@@ -22,7 +22,7 @@ int hammingDistance(const vector<vector<int>>& grid)
     return distance;
 }
 
-int manhattanDistance(const vector<vector<int>>& grid)
+double manhattanDistance(const vector<vector<int>>& grid)
 {
     int distance = 0;
     int k = grid[0].size();
@@ -48,7 +48,7 @@ double euclideanDistance(const vector<vector<int>>& grid)
             if(grid[i][j]==0) continue;
             int target_x = (grid[i][j]-1)/k;
             int target_y = (grid[i][j]-1)%k;
-            distance+=sqrt(pow(i-target_x,2)+pow(j-target_y,2));
+            distance += sqrt(pow(i-target_x,2) + pow(j-target_y,2));
         }
     }
     return distance;
@@ -91,7 +91,7 @@ int countConflict(const vector<vector<int>>& grid)
     
 }
 
-int linearConflict(const vector<vector<int>>& grid){
+double linearConflict(const vector<vector<int>>& grid){
     return manhattanDistance(grid) + 2*countConflict(grid);
 }
 
