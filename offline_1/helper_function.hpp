@@ -44,8 +44,8 @@ int find_row_of_blank_from_bottom(vector<vector<int>> grid){
     int k = grid[0].size();
 
 
-    for(int i= k-1; i>0; i--){
-        for(int j = k-1; j>0; j--){
+    for(int i= k-1; i>=0; i--){
+        for(int j = k-1; j>=0; j--){
             if(grid[i][j]==0)  return k-i;  /// k+1 worked?
         }
     }

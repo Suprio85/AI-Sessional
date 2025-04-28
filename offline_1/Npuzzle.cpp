@@ -141,7 +141,7 @@ public:
             continue;
             
             this->expanded_nodes++;
-
+            
             if (isGoalState(current_state->grid))
             {
                 cout << "Minimum Number of moves: " << current_state->move << endl;
@@ -202,7 +202,7 @@ int main()
     vector<vector<int>> grid(K, vector<int>(K, 0));
     cin >> grid;
     state initial_state(grid);
-     puzzleSolver solver(K, linearConflict, initial_state);
+     puzzleSolver solver(K,euclideanDistance,initial_state);
     // cout<<euclideanDistance(grid)<<endl;
 
     solver.solvePuzzle();
