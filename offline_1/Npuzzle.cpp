@@ -75,7 +75,7 @@ public:
         this->initial_state = initial_state;
     }
 
-    bool isSolvable(vector<vector<int>> grid)
+    bool isSolvable(vector<vector<int>>& grid)
     {
         // odd case
         int inversions = count_inversions(grid);
@@ -140,15 +140,14 @@ public:
             if (closed_set.count(current_state->grid) > 0)
             continue;
             
-            this->expanded_nodes++;
             
             if (isGoalState(current_state->grid))
             {
                 cout << "Minimum Number of moves: " << current_state->move << endl;
-                cout << "Path to goal state: " << endl;
                 printPath(current_state);
                 break;
             }
+            this->expanded_nodes++;
 
             closed_set.insert(current_state->grid);
 
@@ -202,9 +201,7 @@ int main()
     vector<vector<int>> grid(K, vector<int>(K, 0));
     cin >> grid;
     state initial_state(grid);
-     puzzleSolver solver(K,euclideanDistance,initial_state);
-    // cout<<euclideanDistance(grid)<<endl;
-
+     puzzleSolver solver(K,linearConflict,initial_state);
     solver.solvePuzzle();
 }
 
