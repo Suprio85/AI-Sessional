@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+#include "Graph.hpp"
+#include "constructiveAlgorithm.hpp"
+using namespace std;
+
+
+ostream& operator<<(ostream& os, const graph & g) {
+    os << "Number of vertices: " << g.n << "\n";
+    os << "Number of edges: " << g.m << "\n";
+    os << "Edges:\n";
+    for (const auto& e : g.edges) {
+        os << e.u << " -- " << e.v << " (weight: " << e.w << ")\n";
+    }
+    return os;
+}   
+
+
+graph read_graph(const string& filename){
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << filename << endl;
+        exit(1);
+    }
+
+    graph g;
+    file >> g.n >> g.m;
+    g.adj.resize(g.n);
+
+    for (int i = 0; i < g.m; ++i) {
+        int u, v, w;
+        file >> u >> v >> w;
+        u--; // 0-based indexing
+        v--;  
+        g.edges.emplace_back(u, v, w);
+        g.adj[u].push_back(v);
+        g.adj[v].push_back(u); 
+    }
+    return g;
+}
+
+
+
+int main(){
+    string filename ="set/graph.txt";
+    graph g = read_graph(filename);
+
+    ConstructiveAlgorithm ca(g);
+
+    cout<<g<<endl;
+
+    cout<<ca.random_heuristic(10);
+
+
+
+  
+}
+
