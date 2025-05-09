@@ -32,26 +32,39 @@ graph read_graph(const string& filename){
         u--; // 0-based indexing
         v--;  
         g.edges.emplace_back(u, v, w);
-        g.adj[u].push_back(v);
-        g.adj[v].push_back(u); 
+        g.adj[u].push_back({w,v});
+        g.adj[v].push_back({w,v}); 
     }
+
+    cout<<g;
+
+    sort(g.edges.rbegin(),g.edges.rend());
     return g;
 }
 
 
 
 int main(){
-    string filename ="set/graph.txt";
-    graph g = read_graph(filename);
 
-    ConstructiveAlgorithm ca(g);
+    ofstream out("out.txt");
 
-    cout<<g<<endl;
+    
+    string folder ="set1";
+    for(int i=11; i<=11; i++){
+        string graph_name ="g"+to_string(i);
+        string file_name = graph_name+".rud";
+        
+        graph g = read_graph(string(folder+"/"+file_name));
+        out<<g;
+        ConstructiveAlgorithm ca(g);
+        set<int> x,y;
+        
+       auto ans = ca.semi_greedy_heuristics(1,x,y);
+    //    ca.local_search(x,y);
 
-    cout<<ca.random_heuristic(10);
-
-
-
-  
+       out<<ans<<endl;
+         ca.local_search(x,y).first;
+    }
+   
 }
 
