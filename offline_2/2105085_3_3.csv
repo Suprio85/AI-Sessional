@@ -1,0 +1,2 @@
+Problem Name,|V| or n,|E| or m,Simple Randomized or Randomized-1,Simple Greedy or Greedy-1,Semi-greedy or Greedy-1,Simple local or local-1,No. of iterations,GRASP-1,No. of iterations,Known best solution or upper bound
+G3,800,19176,9590.10,11032,11197 (alpha=0.55),11335,109,11467,75,12077
