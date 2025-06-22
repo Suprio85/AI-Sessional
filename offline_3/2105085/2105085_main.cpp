@@ -1,6 +1,6 @@
-#include "ChainReaction.hpp"
-#include "heruistics.hpp"
-#include "ChainReactionAI.hpp"
+#include "2105085_ChainReaction.hpp"
+#include "2105085_heruistics.hpp"
+#include "2105085_ChainReactionAI.hpp"
 #include<bits/stdc++.h>
 #include<stdlib.h>
 

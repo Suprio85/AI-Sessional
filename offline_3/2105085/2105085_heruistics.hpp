@@ -2,7 +2,7 @@
 #define HERUISTICS_HPP
 
 #include <bits/stdc++.h>
-#include "ChainReaction.hpp"
+#include "2105085_ChainReaction.hpp"
 using namespace std;
 
 int heuristic5(const state &S, const char &player)

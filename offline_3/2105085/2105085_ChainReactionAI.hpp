@@ -1,8 +1,8 @@
 #ifndef CHAINREACTIONAI_HPP
 #define CHAINREACTIONAI_HPP
 #include <bits/stdc++.h>
-#include "ChainReaction.hpp"
-#include "heruistics.hpp"
+#include "2105085_ChainReaction.hpp"
+#include "2105085_heruistics.hpp"
 using namespace std;
 class ChainReactionAI
 {
@@ -32,8 +32,8 @@ class ChainReactionAI
             return heuristic6(S, player);
        case 7:
            return composite_eval(S, player);
-         default:
-           return random_heuristic(S, player);
+        default:
+           return random_heuristic(S, player); 
    }
 }
 
@@ -53,7 +53,7 @@ class ChainReactionAI
                 for (int j = 0; j < COLS; j++)
                 {
                     cell c(i, j);
-                    if (S.is_empty(c) or S.get_player(c)==player){   
+                    if (S.is_empty(c) or S.get_player(c)==player){
                         state child = S;
                         child.add_atom(c, player);
                         int eval = min_max(child, depth - 1, alpha, beta, false, player);
@@ -113,12 +113,7 @@ class ChainReactionAI
                 child.add_atom(c, player, false);
                 //  cout<<"Adding atom at (" << c.x << "," << c.y << ") for player: " <<player << endl;
                 // child.game_board.debug();
-                int moveValue = min_max(child,
-                                        depth - 1,
-                                        NEG_INF,
-                                        POS_INF,
-                                        false, player);
-
+                int moveValue = min_max(child,depth - 1, NEG_INF, POS_INF, false, player);
                 // cout << "Evaluating cell (" << c.x << "," << c.y << ") with move value: " << moveValue << endl;
                 // cout << "Best Value so far: " << bestValue << endl;
                 // cout << "Best Cell so far: (" << bestCell.x << "," << bestCell.y << ")\n";
