@@ -397,7 +397,7 @@ int random_heuristic(const state &S, const char &player) {
     if (S.count[oppidx] == 0 && S.count[pidx] > 0)
         return POS_INF;
 
-    return (std::rand() % 201) - 100; 
+    return (std::rand() % 201) - 100;
 }
 
 int composite_eval(const state &S, const char &player)

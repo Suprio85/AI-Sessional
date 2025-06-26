@@ -33,7 +33,7 @@ class ChainReactionAI
        case 7:
            return composite_eval(S, player);
         default:
-           return random_heuristic(S, player); 
+           return random_heuristic(S, player);
    }
 }
 
