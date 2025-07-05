@@ -1,10 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
+string trim(const string& str) {
+    size_t first = str.find_first_not_of(" \t\n\r\f\v");
+    if (first == string::npos) return "";
+    size_t last = str.find_last_not_of(" \t\n\r\f\v");
+    return str.substr(first, (last - first + 1));
+}
 
 
 struct instance {
-    unordered_map<string, string> attributes; // Attributes of the instance
-    string classLabel; // Class label of the instance
+    unordered_map<string, string> attributes;
+    string classLabel;
 };
 
 struct Dataset{
@@ -15,8 +21,8 @@ struct Dataset{
     string targetAttribute;
     vector<vector<string>> data;
     vector<instance> instances;
-    vector<int> categoricalindices; // Indices of categorical attributes
-    vector<int> numericalindices; // Indices of numerical attributes
+    vector<int> categoricalindices; //categorical attributes
+    vector<int> numericalindices; //  numerica attributes
 
     Dataset(string filename) : filename(filename){
 
@@ -43,7 +49,7 @@ struct Dataset{
     void head(int n = 5) {
         if (data.empty()) return;
         cout << "First " << n << " instances:" << endl;
-        for (int i = 0; i < min(n, (int)data.size()); ++i) {
+        for (int i = 0; i < min(n, (int)data.size()); i++) {
             for (const auto& value : data[i]) {
                 cout << value << " ";
             }
@@ -62,24 +68,31 @@ Dataset loadData(string filename) {
     if (getline(file, line)) {
         stringstream ss(line);
         string attribute;
+        vector<string> header;
         while (getline(ss, attribute, ',')) {
-            dataset.attributeNames.push_back(attribute);
+            attribute = trim(attribute);
+            header.push_back(attribute);
         }
-        dataset.targetAttribute = dataset.attributeNames.back();
+        for(int i = 0; i < header.size()-1; ++i) {
+            dataset.attributeNames.push_back(header[i]);
+        }
+        dataset.targetAttribute = header.back();
+
     }
 
-    // Read data
+    
     while (getline(file, line)) {
         vector<string> row;
         stringstream ss(line);
         string value;
         while (getline(ss, value, ',')) {
+            value = trim(value);
             row.push_back(value);
         }
         if (!row.empty()) {
             dataset.data.push_back(row);
             instance inst;
-            for (size_t i = 0; i < row.size(); ++i) {
+            for (size_t i = 0; i < row.size()-1; ++i) {
                 inst.attributes[dataset.attributeNames[i]] = row[i];
             }
             inst.classLabel = row.back();
@@ -87,7 +100,7 @@ Dataset loadData(string filename) {
         }
     }
 
-    // Identify categorical and numerical attributes
+  
     for (size_t i = 0; i < dataset.attributeNames.size(); ++i) {
         bool isCategorical = false;
         for (const auto& row : dataset.data) {
@@ -106,8 +119,41 @@ Dataset loadData(string filename) {
     file.close();
     return dataset;
 }
+void imputeMissingValues(Dataset& dataset) {
+    unordered_map<string, unordered_map<string, int>> frequencyMap;
 
-// split data into training and testing sets
+    for (const auto& inst : dataset.instances) {
+        for (const auto& attr : dataset.attributeNames) {
+            const string& val = inst.attributes.at(attr);
+            if (val != "?") {
+                frequencyMap[attr][val]++;
+            }
+        }
+    }
+
+    unordered_map<string, string> attrMode;
+    for (const auto& [attr, valueCount] : frequencyMap) {
+        string modeValue;
+        int maxCount = 0;
+        for (const auto& [val, count] : valueCount) {
+            if (count > maxCount) {
+                maxCount = count;
+                modeValue = val;
+            }
+        }
+        attrMode[attr] = modeValue;
+    }
+
+    for (auto& inst : dataset.instances) {
+        for (auto& [attr, val] : inst.attributes) {
+            if (val == "?") {
+                val = attrMode[attr];
+            }
+        }
+    }
+
+}
+
 pair<Dataset, Dataset> trainTestSplit(const Dataset& dataset, double trainRatio = 0.8) {
     Dataset trainSet(dataset.filename);
     Dataset testSet(dataset.filename);
@@ -126,11 +172,11 @@ pair<Dataset, Dataset> trainTestSplit(const Dataset& dataset, double trainRatio 
 
     int trainSize = static_cast<int>(dataset.data.size() * trainRatio);
 
-    // Shuffle the dataset
+   
     vector<int> indices(dataset.data.size());
     iota(indices.begin(), indices.end(), 0);
     shuffle(indices.begin(), indices.end(), default_random_engine(random_device{}()));
-    // Split the dataset
+    
     
     for (int i = 0; i < trainSize; ++i) {
         trainSet.data.push_back(dataset.data[indices[i]]);
