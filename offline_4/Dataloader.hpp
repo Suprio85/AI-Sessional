@@ -1,12 +1,24 @@
 #include<bits/stdc++.h>
 using namespace std;
-string trim(const string& str) {
-    size_t first = str.find_first_not_of(" \t\n\r\f\v");
-    if (first == string::npos) return "";
-    size_t last = str.find_last_not_of(" \t\n\r\f\v");
-    return str.substr(first, (last - first + 1));
-}
 
+string trim(const string& str) {
+    int first_pos = -1;
+    int last_pos = -1;
+    for(int i=0; i<str.size(); i++){
+        if(str[i]!=' '){
+            first_pos = i;
+            break;
+        }
+    }
+     for(int i=str.size()-1; i>=0; i--){
+        if(str[i]!= ' '){
+            last_pos = i;
+            break;
+        }
+    }
+
+    return str.substr(first_pos,last_pos-first_pos+1);
+}
 
 struct instance {
     unordered_map<string, string> attributes;
@@ -92,7 +104,7 @@ Dataset loadData(string filename) {
         if (!row.empty()) {
             dataset.data.push_back(row);
             instance inst;
-            for (size_t i = 0; i < row.size()-1; ++i) {
+            for (int i = 0; i < row.size()-1; ++i) {
                 inst.attributes[dataset.attributeNames[i]] = row[i];
             }
             inst.classLabel = row.back();

@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
         cout << "Usage: " << argv[0] << " <criterion> <maxDepth>" << endl;
         return 1;
     }
-    const int num_iter = 1;
+    const int num_iter = 20;
    
     Dataset dataset = loadData("Datasets/adult.data");
 
